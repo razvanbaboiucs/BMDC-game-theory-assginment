@@ -1,0 +1,183 @@
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js  
+N-doors Problem Simulation
+
+Enter number of doors (N): 10
+Enter number of simulations (K): 10
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.00%
+Strategy 2 (Switch door) - Win Probability: 80.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 10
+Enter number of simulations (K): 100
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 10.00%
+Strategy 2 (Switch door) - Win Probability: 96.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 10
+Enter number of simulations (K): 1000
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 10.10%
+Strategy 2 (Switch door) - Win Probability: 91.20%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 10
+Enter number of simulations (K): 10000
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 10.54%
+Strategy 2 (Switch door) - Win Probability: 89.92%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 100
+Enter number of simulations (K): 10
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.00%
+Strategy 2 (Switch door) - Win Probability: 100.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 100
+Enter number of simulations (K): 100
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 1.00%
+Strategy 2 (Switch door) - Win Probability: 98.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+
+N-doors Problem Simulation
+
+Enter number of doors (N): 
+Enter number of simulations (K): %                                                                                                       
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 100
+Enter number of simulations (K): 1000
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 1.60%
+Strategy 2 (Switch door) - Win Probability: 99.20%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 100
+Enter number of simulations (K): 10000
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 1.04%
+Strategy 2 (Switch door) - Win Probability: 99.09%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 1000
+Enter number of simulations (K): 10
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.00%
+Strategy 2 (Switch door) - Win Probability: 100.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 1000
+Enter number of simulations (K): 100
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 1.00%
+Strategy 2 (Switch door) - Win Probability: 100.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 1000
+Enter number of simulations (K): 1000
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.10%
+Strategy 2 (Switch door) - Win Probability: 100.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 1000
+Enter number of simulations (K): 10000
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.08%
+Strategy 2 (Switch door) - Win Probability: 99.93%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 10000
+Enter number of simulations (K): 10
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.00%
+Strategy 2 (Switch door) - Win Probability: 100.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 10000
+Enter number of simulations (K): 100
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.00%
+Strategy 2 (Switch door) - Win Probability: 100.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 10000
+Enter number of simulations (K): 1000
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.10%
+Strategy 2 (Switch door) - Win Probability: 100.00%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % bun run 2-doors.js
+N-doors Problem Simulation
+
+Enter number of doors (N): 10000
+Enter number of simulations (K): 10000
+
+Running simulation...
+
+Results:
+Strategy 1 (Keep initial door) - Win Probability: 0.01%
+Strategy 2 (Switch door) - Win Probability: 99.96%
+razvanbaboiu@Razvans-MacBook-Pro-2 assignment-1 % 

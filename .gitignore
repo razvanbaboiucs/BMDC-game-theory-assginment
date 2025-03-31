@@ -1,0 +1,53 @@
+# Bun build files
+*.bun
+bun.lockb
+node_modules/
+*.bun-build
+
+# Bun compiled executables
+/nash-eq
+/doors
+/ultimatum
+/extensive-form
+
+# Project specific executables and builds
+/1-nash-eq/1-nash-eq
+/1-nash-eq/1-nash-eq.exe
+/1-nash-eq/*.bun-build
+/1-nash-eq/bin/*
+
+/2-doors/2-doors
+/2-doors/2-doors.exe
+/2-doors/*.bun-build
+/2-doors/bin/*
+
+/3-ultimatum/3-ultimatum
+/3-ultimatum/3-ultimatum.exe
+/3-ultimatum/*.bun-build
+/3-ultimatum/bin/*
+
+/4-extensive-form/4-extensive-form
+/4-extensive-form/4-extensive-form.exe
+/4-extensive-form/*.bun-build
+/4-extensive-form/bin/*
+
+# Executables
+*.exe
+*.out
+*.app
+**/bin/*
+
+# Bun debug files
+.bun-debug
+
+# Logs
+*.log
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

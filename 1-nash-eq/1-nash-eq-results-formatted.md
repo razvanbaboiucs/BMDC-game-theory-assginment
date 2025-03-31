@@ -1,5 +1,9 @@
 # Pure Nash Equilibria Finder for 2-Player Normal-Form Games
 
+## Git link:
+
+https://github.com/razvanbaboiucs/BMDC-game-theory-assginment/tree/master/1-nash-eq
+
 ## Algorithm Explanation:
 
 ### Pseudocode:

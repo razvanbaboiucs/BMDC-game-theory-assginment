@@ -1,6 +1,12 @@
 # Extensive Form Games solved using Backward Induction - Simulations
 
-## Game 1
+## Git link:
+
+https://github.com/razvanbaboiucs/BMDC-game-theory-assginment/tree/master/4-extensive-form
+
+## Simulation Results
+
+### Game 1
 Extensive Form Game Solver using Backward Induction (SPNE)
 
 Enter number of rounds (must be even): 50
@@ -117,7 +123,7 @@ Optimal decisions (Stop/Continue) for each round:
 - Round 49 (Player 1): Continue
 - Round 50 (Player 2): Stop
 
-## Game 2
+### Game 2
 Extensive Form Game Solver using Backward Induction (SPNE)
 
 Enter number of rounds (must be even): 10
@@ -154,7 +160,7 @@ Optimal decisions (Stop/Continue) for each round:
 - Round 9 (Player 1): Continue
 - Round 10 (Player 2): Stop
 
-## Game 3
+### Game 3
 Extensive Form Game Solver using Backward Induction (SPNE)
 
 Enter number of rounds (must be even): 6
@@ -183,7 +189,7 @@ Optimal decisions (Stop/Continue) for each round:
 - Round 5 (Player 1): Continue
 - Round 6 (Player 2): Stop
 
-## Game 4
+### Game 4
 Extensive Form Game Solver using Backward Induction (SPNE)
 
 Enter number of rounds (must be even): 8
@@ -216,7 +222,7 @@ Optimal decisions (Stop/Continue) for each round:
 - Round 7 (Player 1): Stop
 - Round 8 (Player 2): Stop
 
-## Game 5
+### Game 5
 Extensive Form Game Solver using Backward Induction (SPNE)
 
 Enter number of rounds (must be even): 16
@@ -265,7 +271,7 @@ Optimal decisions (Stop/Continue) for each round:
 - Round 15 (Player 1): Stop
 - Round 16 (Player 2): Stop
 
-## Game 6
+### Game 6
 Extensive Form Game Solver using Backward Induction (SPNE)
 
 Enter number of rounds (must be even): 16
@@ -314,7 +320,7 @@ Optimal decisions (Stop/Continue) for each round:
 - Round 15 (Player 1): Continue
 - Round 16 (Player 2): Stop
 
-## Game 7
+### Game 7
 Extensive Form Game Solver using Backward Induction (SPNE)
 
 Enter number of rounds (must be even): 16
@@ -363,7 +369,7 @@ Optimal decisions (Stop/Continue) for each round:
 - Round 15 (Player 1): Stop
 - Round 16 (Player 2): Stop
 
-## Game 8
+### Game 8
 Extensive Form Game Solver using Backward Induction (SPNE)
 
 Enter number of rounds (must be even): 16

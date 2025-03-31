@@ -1,5 +1,9 @@
 # Ultimatum Game: Theoretical Analysis
 
+## Git link:
+
+https://github.com/razvanbaboiucs/BMDC-game-theory-assginment/tree/master/3-ultimatum
+
 ## Game Description
 
 The Ultimatum Game is a classic economic experiment that demonstrates strategic decision-making and concepts of fairness:

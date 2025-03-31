@@ -1,6 +1,12 @@
 # Monty Hall Problem Simulation Results
 
-## N = 10 Doors
+## Git link:
+
+https://github.com/razvanbaboiucs/BMDC-game-theory-assginment/tree/master/2-doors
+
+## Simulation Results
+
+### N = 10 Doors
 
 | Simulations (K) | Keep Initial Door Win % | Switch Door Win % |
 |----------------:|------------------------:|------------------:|
@@ -9,7 +15,7 @@
 | 1,000           | 10.10%                  | 91.20%            |
 | 10,000          | 10.54%                  | 89.92%            |
 
-## N = 100 Doors
+### N = 100 Doors
 
 | Simulations (K) | Keep Initial Door Win % | Switch Door Win % |
 |----------------:|------------------------:|------------------:|
@@ -18,7 +24,7 @@
 | 1,000           | 1.60%                   | 99.20%            |
 | 10,000          | 1.04%                   | 99.09%            |
 
-## N = 1,000 Doors
+### N = 1,000 Doors
 
 | Simulations (K) | Keep Initial Door Win % | Switch Door Win % |
 |----------------:|------------------------:|------------------:|
@@ -27,7 +33,7 @@
 | 1,000           | 0.10%                   | 100.00%           |
 | 10,000          | 0.08%                   | 99.93%            |
 
-## N = 10,000 Doors
+### N = 10,000 Doors
 
 | Simulations (K) | Keep Initial Door Win % | Switch Door Win % |
 |----------------:|------------------------:|------------------:|

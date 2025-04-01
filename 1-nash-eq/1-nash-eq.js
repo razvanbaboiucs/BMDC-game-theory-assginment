@@ -1,6 +1,6 @@
 // Pure Nash Equilibria Finder for 2-Player Normal-Form Games
 
-const { createReadlineInterface, prompt, createMatrix } = require('../utility');
+const { createReadlineInterface, prompt, createMatrix, getRandomInt } = require('../utility');
 
 const readline = createReadlineInterface();
 
@@ -11,8 +11,8 @@ const generateRandomPayoffs = (rows, cols) => {
 
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
-      matrix1[i][j] = Math.floor(Math.random() * 10);
-      matrix2[i][j] = Math.floor(Math.random() * 10);
+      matrix1[i][j] = getRandomInt(-1000000, 10000000)
+      matrix2[i][j] = getRandomInt(-1000000, 10000000)
     }
   }
 

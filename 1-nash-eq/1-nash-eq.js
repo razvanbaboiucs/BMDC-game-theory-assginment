@@ -11,8 +11,8 @@ const generateRandomPayoffs = (rows, cols) => {
 
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
-      matrix1[i][j] = getRandomInt(-1000000, 10000000)
-      matrix2[i][j] = getRandomInt(-1000000, 10000000)
+      matrix1[i][j] = getRandomInt(0, 100)
+      matrix2[i][j] = getRandomInt(0, 100)
     }
   }
 

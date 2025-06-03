@@ -31,6 +31,16 @@ node_modules/
 /4-extensive-form/*.bun-build
 /4-extensive-form/bin/*
 
+/5-n-player-pure-ne/5-n-player-pure-ne
+/5-n-player-pure-ne/5-n-player-pure-ne.exe
+/5-n-player-pure-ne/*.bun-build
+/5-n-player-pure-ne/bin/*
+
+/6-n-player-mixed-ne/6-n-player-mixed-ne
+/6-n-player-mixed-ne/6-n-player-mixed-ne.exe
+/6-n-player-mixed-ne/*.bun-build
+/6-n-player-mixed-ne/bin/*
+
 # Executables
 *.exe
 *.out

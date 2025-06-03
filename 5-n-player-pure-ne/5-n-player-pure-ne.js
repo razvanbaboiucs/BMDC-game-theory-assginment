@@ -1,11 +1,10 @@
 // Pure Nash Equilibria Finder for N-Player Normal-Form Games
 
-const { createReadlineInterface, prompt, createMatrix, getRandomInt } = require('../utility');
+const { createReadlineInterface, prompt, getRandomInt } = require('../utility');
 
 const readline = createReadlineInterface();
 const MAX_PLAYERS = 10;
 
-// Function to create an n-dimensional payoff matrix
 const createPayoffMatrix = (dimensions) => {
   if (dimensions.length === 0) return 0;
   if (dimensions.length === 1) return Array(dimensions[0]).fill(0);
@@ -15,7 +14,6 @@ const createPayoffMatrix = (dimensions) => {
   );
 };
 
-// Function to get manual payoffs for n-dimensional matrix
 const getManualPayoffs = async (players, strategies) => {
   const payoffMatrices = Array(players).fill().map(() => 
     createPayoffMatrix(strategies)
@@ -43,7 +41,6 @@ const getManualPayoffs = async (players, strategies) => {
   return payoffMatrices;
 };
 
-// Function to generate random payoffs for n-dimensional matrix
 const generateRandomPayoffs = (players, strategies) => {
   const payoffMatrices = Array(players).fill().map(() => 
     createPayoffMatrix(strategies)
@@ -67,7 +64,6 @@ const generateRandomPayoffs = (players, strategies) => {
   return payoffMatrices;
 };
 
-// Function to check if a strategy profile is a Nash Equilibrium
 const isNashEquilibrium = (payoffMatrices, strategies, currentProfile) => {
   const players = payoffMatrices.length;
 
@@ -95,7 +91,6 @@ const isNashEquilibrium = (payoffMatrices, strategies, currentProfile) => {
   return true;
 };
 
-// Function to find all pure Nash Equilibria
 const findPureNashEquilibria = (payoffMatrices, strategies) => {
   const equilibria = [];
   const players = payoffMatrices.length;
@@ -117,7 +112,6 @@ const findPureNashEquilibria = (payoffMatrices, strategies) => {
   return equilibria;
 };
 
-// Function to display n-dimensional payoff matrix
 const displayPayoffMatrix = (matrix, player, strategies) => {
   console.log(`\nPayoff Matrix for Player ${player + 1}:`);
   const display = (indices = []) => {
@@ -140,11 +134,9 @@ const displayPayoffMatrix = (matrix, player, strategies) => {
   display();
 };
 
-// Main function
 const main = async () => {
   console.log('Pure Nash Equilibria Finder for N-Player Normal-Form Games\n');
 
-  // Get number of players
   const numPlayers = parseInt(
     await prompt(`Enter number of players (maximum ${MAX_PLAYERS}): `, readline)
   );
@@ -155,7 +147,6 @@ const main = async () => {
     return;
   }
 
-  // Get number of strategies for each player
   const strategies = [];
   for (let i = 0; i < numPlayers; i++) {
     strategies.push(
@@ -163,21 +154,17 @@ const main = async () => {
     );
   }
 
-  // Ask for payoff input method
   const isRandom = (await prompt('Do you want random payoffs? (yes/no): ', readline))
     .toLowerCase() === 'yes';
 
-  // Get payoffs either randomly or manually
   const payoffMatrices = isRandom
     ? generateRandomPayoffs(numPlayers, strategies)
     : await getManualPayoffs(numPlayers, strategies);
 
-  // Display the game matrices
   for (let i = 0; i < numPlayers; i++) {
     displayPayoffMatrix(payoffMatrices[i], i, strategies);
   }
 
-  // Find and display pure Nash Equilibria
   const equilibria = findPureNashEquilibria(payoffMatrices, strategies);
 
   console.log('\nPure Nash Equilibria:');
@@ -193,5 +180,4 @@ const main = async () => {
   readline.close();
 };
 
-// Run the program
 main();

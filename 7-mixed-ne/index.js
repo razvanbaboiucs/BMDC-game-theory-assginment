@@ -1,277 +1,233 @@
-// Mixed Nash Equilibrium Solver for 2x2 Games
-// Run with: bun run nash_solver.js
+// Mixed Nash Equilibria Finder for 2-Player Normal-Form Games
 
-class GameSolver {
-    constructor(payoffMatrix) {
-        // payoffMatrix[i][j] = [payoff_player1, payoff_player2]
-        this.payoffs = payoffMatrix;
-        this.validateMatrix();
+const { createReadlineInterface, prompt, createMatrix, getRandomInt } = require('../utility');
+
+const readline = createReadlineInterface();
+const MAX_PLAYERS = 2; // Fixed to 2 players for this implementation
+
+// Function to create payoff matrices for both players
+const createPayoffMatrices = (strategies) => {
+  return Array(MAX_PLAYERS).fill().map(() => createMatrix(strategies[0], strategies[1]));
+};
+
+// Function to get manual payoffs
+const getManualPayoffs = async (strategies) => {
+  const payoffMatrices = createPayoffMatrices(strategies);
+
+  for (let player = 0; player < MAX_PLAYERS; player++) {
+    console.log(`\nEnter payoffs for Player ${player + 1}:`);
+    for (let i = 0; i < strategies[0]; i++) {
+      for (let j = 0; j < strategies[1]; j++) {
+        payoffMatrices[player][i][j] = parseInt(
+          await prompt(`Enter payoff for strategy profile (${i + 1}, ${j + 1}): `, readline)
+        );
+      }
     }
+  }
 
-    validateMatrix() {
-        if (this.payoffs.length !== 2 || this.payoffs[0].length !== 2 || this.payoffs[1].length !== 2) {
-            throw new Error("Must be a 2x2 game matrix");
-        }
-        
-        for (let i = 0; i < 2; i++) {
-            for (let j = 0; j < 2; j++) {
-                if (!Array.isArray(this.payoffs[i][j]) || this.payoffs[i][j].length !== 2) {
-                    throw new Error("Each cell must contain [player1_payoff, player2_payoff]");
-                }
-            }
-        }
+  return payoffMatrices;
+};
+
+// Function to generate random payoffs
+const generateRandomPayoffs = (strategies) => {
+  const payoffMatrices = createPayoffMatrices(strategies);
+
+  for (let player = 0; player < MAX_PLAYERS; player++) {
+    for (let i = 0; i < strategies[0]; i++) {
+      for (let j = 0; j < strategies[1]; j++) {
+        payoffMatrices[player][i][j] = getRandomInt(0, 10);
+      }
     }
+  }
 
-    // Get player 1's payoff when player 1 plays strategy i and player 2 plays strategy j
-    getPayoff1(i, j) {
-        return this.payoffs[i][j][0];
+  return payoffMatrices;
+};
+
+// Function to solve 2x2 system of linear equations for mixed strategy probabilities
+const solveMixedStrategy = (payoffMatrix, player) => {
+  // For a 2x2 game, we solve the equation where expected payoffs are equal
+  // For player 1: q * u1(s1,t1) + (1-q) * u1(s1,t2) = q * u1(s2,t1) + (1-q) * u1(s2,t2)
+  // For player 2: p * u2(s1,t1) + (1-p) * u2(s2,t1) = p * u2(s1,t2) + (1-p) * u2(s2,t2)
+  
+  let a, b, c, d;
+  
+  if (player === 0) { // Player 1's perspective (solving for player 2's probability q)
+    // We need to find q such that player 1 is indifferent between their strategies
+    a = payoffMatrix[0][0]; // u1(s1,t1)
+    b = payoffMatrix[0][1]; // u1(s1,t2)
+    c = payoffMatrix[1][0]; // u1(s2,t1)
+    d = payoffMatrix[1][1]; // u1(s2,t2)
+  } else { // Player 2's perspective (solving for player 1's probability p)
+    // We need to find p such that player 2 is indifferent between their strategies
+    a = payoffMatrix[0][0]; // u2(s1,t1)
+    b = payoffMatrix[1][0]; // u2(s2,t1)
+    c = payoffMatrix[0][1]; // u2(s1,t2)
+    d = payoffMatrix[1][1]; // u2(s2,t2)
+  }
+
+  // Solve for probability: q * (a - c) + (1-q) * (b - d) = 0 or p * (a - c) + (1-p) * (b - d) = 0
+  // Simplifying: q * (a - c - b + d) = (d - b) or p * (a - c - b + d) = (d - b)
+  const denominator = a - c - b + d;
+  
+  // Check if denominator is close to zero (no unique solution)
+  if (Math.abs(denominator) < 1e-10) {
+    // Check if numerator is also close to zero (infinitely many solutions)
+    if (Math.abs(d - b) < 1e-10) {
+      return { type: 'infinite', value: null };
     }
+    // Otherwise, no solution exists
+    return { type: 'none', value: null };
+  }
 
-    // Get player 2's payoff when player 1 plays strategy i and player 2 plays strategy j
-    getPayoff2(i, j) {
-        return this.payoffs[i][j][1];
+  const probability = (d - b) / denominator;
+  
+  // Check if probability is in [0,1]
+  if (probability < 0 || probability > 1) {
+    return { type: 'outside', value: probability };
+  }
+  
+  // Check if probability is 0 or 1 (not completely mixed)
+  if (probability === 0 || probability === 1) {
+    return { type: 'pure', value: probability };
+  }
+  
+  // Valid completely mixed strategy
+  return { type: 'mixed', value: probability };
+};
+
+// Function to find completely mixed Nash Equilibria
+const findCompletelyMixedNE = (payoffMatrices) => {
+  // For player 1, we need to find q (probability of player 2 playing first strategy)
+  const player2Solution = solveMixedStrategy(payoffMatrices[0], 0);
+  
+  // For player 2, we need to find p (probability of player 1 playing first strategy)
+  const player1Solution = solveMixedStrategy(payoffMatrices[1], 1);
+  
+  // Check if we have valid completely mixed solutions for both players
+  if (player1Solution.type === 'mixed' && player2Solution.type === 'mixed') {
+    return {
+      exists: true,
+      strategies: [
+        [player1Solution.value, 1 - player1Solution.value],
+        [player2Solution.value, 1 - player2Solution.value]
+      ],
+      explanation: 'Found a completely mixed Nash Equilibrium.'
+    };
+  }
+  
+  // Handle special cases
+  let explanation = '';
+  
+  if (player1Solution.type === 'infinite' || player2Solution.type === 'infinite') {
+    explanation = 'The game has infinitely many mixed equilibria.';
+  } else if (player1Solution.type === 'none' || player2Solution.type === 'none') {
+    explanation = 'No completely mixed Nash Equilibrium exists for this game.';
+  } else if (player1Solution.type === 'outside' || player2Solution.type === 'outside') {
+    explanation = 'The calculated probabilities are outside the valid range [0,1].';
+  } else if (player1Solution.type === 'pure' || player2Solution.type === 'pure') {
+    explanation = 'The game has a mixed equilibrium, but it is not completely mixed (some probabilities are 0 or 1).';
+  }
+  
+  return { exists: false, strategies: null, explanation };
+};
+
+// Function to display payoff matrix
+const displayPayoffMatrix = (matrix, player) => {
+  console.log(`\nPayoff Matrix for Player ${player + 1}:`);
+  console.log('[');
+  matrix.forEach(row => {
+    console.log(`  [${row.join(', ')}]`);
+  });
+  console.log(']\n');
+};
+
+// Function to verify if a strategy profile is a Nash Equilibrium
+const verifyNashEquilibrium = (payoffMatrices, mixedStrategies) => {
+  // For a 2x2 game with completely mixed strategies, we verify that each player
+  // is indifferent between their pure strategies given the opponent's mixed strategy
+  
+  const [p1, p2] = mixedStrategies[0]; // Player 1's mixed strategy
+  const [q1, q2] = mixedStrategies[1]; // Player 2's mixed strategy
+  
+  // Expected payoff for Player 1 when playing pure strategy 1
+  const p1s1 = q1 * payoffMatrices[0][0][0] + q2 * payoffMatrices[0][0][1];
+  
+  // Expected payoff for Player 1 when playing pure strategy 2
+  const p1s2 = q1 * payoffMatrices[0][1][0] + q2 * payoffMatrices[0][1][1];
+  
+  // Expected payoff for Player 2 when playing pure strategy 1
+  const p2s1 = p1 * payoffMatrices[1][0][0] + p2 * payoffMatrices[1][1][0];
+  
+  // Expected payoff for Player 2 when playing pure strategy 2
+  const p2s2 = p1 * payoffMatrices[1][0][1] + p2 * payoffMatrices[1][1][1];
+  
+  // Check if players are indifferent between their strategies (within numerical precision)
+  const isP1Indifferent = Math.abs(p1s1 - p1s2) < 1e-10;
+  const isP2Indifferent = Math.abs(p2s1 - p2s2) < 1e-10;
+  
+  return {
+    isNashEquilibrium: isP1Indifferent && isP2Indifferent,
+    payoffs: {
+      player1: { strategy1: p1s1, strategy2: p1s2 },
+      player2: { strategy1: p2s1, strategy2: p2s2 }
     }
+  };
+};
 
-    // Find completely mixed Nash equilibrium
-    findMixedNashEquilibrium() {
-        console.log("=== Finding Completely Mixed Nash Equilibrium ===\n");
-        
-        // For a completely mixed NE, both players must be indifferent between their strategies
-        // This means expected payoffs from both strategies must be equal
-        
-        // Let p = probability that player 1 plays strategy 0 (top row)
-        // Let q = probability that player 2 plays strategy 0 (left column)
-        
-        // Player 1's indifference condition:
-        // Expected payoff from strategy 0 = Expected payoff from strategy 1
-        // q * payoff1(0,0) + (1-q) * payoff1(0,1) = q * payoff1(1,0) + (1-q) * payoff1(1,1)
-        
-        const a11 = this.getPayoff1(0, 0); // Player 1's payoff: (Top, Left)
-        const a12 = this.getPayoff1(0, 1); // Player 1's payoff: (Top, Right)
-        const a21 = this.getPayoff1(1, 0); // Player 1's payoff: (Bottom, Left)
-        const a22 = this.getPayoff1(1, 1); // Player 1's payoff: (Bottom, Right)
-        
-        console.log("Player 1's payoff matrix:");
-        console.log(`[${a11}, ${a12}]`);
-        console.log(`[${a21}, ${a22}]`);
-        
-        // Solve for q (Player 2's mixing probability)
-        // q * a11 + (1-q) * a12 = q * a21 + (1-q) * a22
-        // q * (a11 - a12) + a12 = q * (a21 - a22) + a22
-        // q * (a11 - a12 - a21 + a22) = a22 - a12
-        
-        const denominator1 = a11 - a12 - a21 + a22;
-        let q = null;
-        
-        if (Math.abs(denominator1) > 1e-10) {
-            q = (a22 - a12) / denominator1;
-            console.log(`\nPlayer 1's indifference condition:`);
-            console.log(`q * ${a11} + (1-q) * ${a12} = q * ${a21} + (1-q) * ${a22}`);
-            console.log(`Solving for q: q = ${q.toFixed(6)}`);
-        } else {
-            console.log("\nPlayer 1 has no indifference condition (strategies have same payoff difference)");
-        }
-        
-        // Player 2's indifference condition:
-        const b11 = this.getPayoff2(0, 0); // Player 2's payoff: (Top, Left)
-        const b12 = this.getPayoff2(0, 1); // Player 2's payoff: (Top, Right)
-        const b21 = this.getPayoff2(1, 0); // Player 2's payoff: (Bottom, Left)
-        const b22 = this.getPayoff2(1, 1); // Player 2's payoff: (Bottom, Right)
-        
-        console.log("\nPlayer 2's payoff matrix:");
-        console.log(`[${b11}, ${b12}]`);
-        console.log(`[${b21}, ${b22}]`);
-        
-        // Solve for p (Player 1's mixing probability)
-        // p * b11 + (1-p) * b21 = p * b12 + (1-p) * b22
-        const denominator2 = b11 - b21 - b12 + b22;
-        let p = null;
-        
-        if (Math.abs(denominator2) > 1e-10) {
-            p = (b22 - b21) / denominator2;
-            console.log(`\nPlayer 2's indifference condition:`);
-            console.log(`p * ${b11} + (1-p) * ${b21} = p * ${b12} + (1-p) * ${b22}`);
-            console.log(`Solving for p: p = ${p.toFixed(6)}`);
-        } else {
-            console.log("\nPlayer 2 has no indifference condition (strategies have same payoff difference)");
-        }
-        
-        // Check if we have a valid completely mixed NE
-        if (p !== null && q !== null && p >= 0 && p <= 1 && q >= 0 && q <= 1) {
-            console.log(`\n✓ Completely Mixed Nash Equilibrium Found!`);
-            console.log(`Player 1 plays strategy 0 with probability: ${p.toFixed(6)}`);
-            console.log(`Player 1 plays strategy 1 with probability: ${(1-p).toFixed(6)}`);
-            console.log(`Player 2 plays strategy 0 with probability: ${q.toFixed(6)}`);
-            console.log(`Player 2 plays strategy 1 with probability: ${(1-q).toFixed(6)}`);
-            
-            // Verify the equilibrium
-            this.verifyMixedEquilibrium(p, q);
-            
-            return { p, q, exists: true };
-        } else {
-            console.log(`\n✗ No valid completely mixed Nash equilibrium exists`);
-            if (p !== null) console.log(`Player 1's optimal p = ${p.toFixed(6)} ${p < 0 || p > 1 ? '(invalid - outside [0,1])' : ''}`);
-            if (q !== null) console.log(`Player 2's optimal q = ${q.toFixed(6)} ${q < 0 || q > 1 ? '(invalid - outside [0,1])' : ''}`);
-            
-            return { p, q, exists: false };
-        }
-    }
-    
-    verifyMixedEquilibrium(p, q) {
-        console.log(`\n=== Verification ===`);
-        
-        // Calculate expected payoffs for Player 1
-        const expectedPayoff1_strategy0 = q * this.getPayoff1(0, 0) + (1-q) * this.getPayoff1(0, 1);
-        const expectedPayoff1_strategy1 = q * this.getPayoff1(1, 0) + (1-q) * this.getPayoff1(1, 1);
-        
-        console.log(`Player 1's expected payoff from strategy 0: ${expectedPayoff1_strategy0.toFixed(6)}`);
-        console.log(`Player 1's expected payoff from strategy 1: ${expectedPayoff1_strategy1.toFixed(6)}`);
-        console.log(`Difference: ${Math.abs(expectedPayoff1_strategy0 - expectedPayoff1_strategy1).toFixed(8)} (should be ≈ 0)`);
-        
-        // Calculate expected payoffs for Player 2
-        const expectedPayoff2_strategy0 = p * this.getPayoff2(0, 0) + (1-p) * this.getPayoff2(1, 0);
-        const expectedPayoff2_strategy1 = p * this.getPayoff2(0, 1) + (1-p) * this.getPayoff2(1, 1);
-        
-        console.log(`Player 2's expected payoff from strategy 0: ${expectedPayoff2_strategy0.toFixed(6)}`);
-        console.log(`Player 2's expected payoff from strategy 1: ${expectedPayoff2_strategy1.toFixed(6)}`);
-        console.log(`Difference: ${Math.abs(expectedPayoff2_strategy0 - expectedPayoff2_strategy1).toFixed(8)} (should be ≈ 0)`);
-    }
-    
-    findPureStrategyEquilibria() {
-        console.log("\n=== Finding Pure Strategy Nash Equilibria ===\n");
-        
-        const equilibria = [];
-        const strategies = ['Top', 'Bottom'];
-        const strategies2 = ['Left', 'Right'];
-        
-        // Check all four pure strategy combinations
-        for (let i = 0; i < 2; i++) {
-            for (let j = 0; j < 2; j++) {
-                if (this.isPureNashEquilibrium(i, j)) {
-                    equilibria.push([i, j]);
-                    console.log(`✓ Pure Nash Equilibrium: (${strategies[i]}, ${strategies2[j]})`);
-                    console.log(`  Payoffs: Player 1 = ${this.getPayoff1(i, j)}, Player 2 = ${this.getPayoff2(i, j)}`);
-                }
-            }
-        }
-        
-        if (equilibria.length === 0) {
-            console.log("✗ No pure strategy Nash equilibria found");
-        }
-        
-        return equilibria;
-    }
-    
-    isPureNashEquilibrium(i, j) {
-        // Check if (i, j) is a Nash equilibrium
-        // Player 1 should not want to deviate from strategy i
-        // Player 2 should not want to deviate from strategy j
-        
-        const currentPayoff1 = this.getPayoff1(i, j);
-        const alternativePayoff1 = this.getPayoff1(1-i, j);
-        
-        const currentPayoff2 = this.getPayoff2(i, j);
-        const alternativePayoff2 = this.getPayoff2(i, 1-j);
-        
-        return currentPayoff1 >= alternativePayoff1 && currentPayoff2 >= alternativePayoff2;
-    }
-    
-    displayGame() {
-        console.log("=== Game Payoff Matrix ===");
-        console.log("Format: [Player1_payoff, Player2_payoff]\n");
-        console.log("           Player 2");
-        console.log("         Left    Right");
-        console.log(`Player 1 Top   ${JSON.stringify(this.payoffs[0][0])}  ${JSON.stringify(this.payoffs[0][1])}`);
-        console.log(`       Bottom ${JSON.stringify(this.payoffs[1][0])}  ${JSON.stringify(this.payoffs[1][1])}`);
-        console.log();
-    }
-}
+// Main function
+const main = async () => {
+  console.log('Mixed Nash Equilibria Finder for 2-Player Normal-Form Games\n');
 
-// Example 1: Manually defined game (Battle of the Sexes variant)
-function example1() {
-    console.log("EXAMPLE 1: Manually defined game");
-    console.log("=====================================\n");
+  // Currently supporting only 2x2 games
+  const strategies = [2, 2];
+  console.log('This implementation finds Nash Equilibria for 2x2 games.');
+
+  // Ask for payoff input method
+  const isRandom = (await prompt('Do you want random payoffs? (yes/no): ', readline))
+    .toLowerCase().startsWith('y');
+
+  // Get payoffs either randomly or manually
+  const payoffMatrices = isRandom
+    ? generateRandomPayoffs(strategies)
+    : await getManualPayoffs(strategies);
+
+  // Display the game matrices
+  for (let i = 0; i < MAX_PLAYERS; i++) {
+    displayPayoffMatrix(payoffMatrices[i], i);
+  }
+
+  // Find completely mixed Nash Equilibria
+  const mixedResult = findCompletelyMixedNE(payoffMatrices);
+
+  console.log('\nCompletely Mixed Nash Equilibria:');
+  if (!mixedResult.exists) {
+    console.log(mixedResult.explanation);
+  } else {
+    console.log('Found a completely mixed Nash Equilibrium:');
+    console.log(`Player 1's strategy: (${mixedResult.strategies[0].map(p => p.toFixed(4)).join(', ')})`);
+    console.log(`Player 2's strategy: (${mixedResult.strategies[1].map(p => p.toFixed(4)).join(', ')})`);
     
-    const payoffs = [
-        [[3, 1], [0, 0]], // Top row: (3,1) when both choose Left, (0,0) when P1=Top, P2=Right
-        [[0, 0], [1, 3]]  // Bottom row: (0,0) when P1=Bottom, P2=Left, (1,3) when both choose Right
-    ];
+    // Verify the Nash Equilibrium
+    const verification = verifyNashEquilibrium(payoffMatrices, mixedResult.strategies);
     
-    const game = new GameSolver(payoffs);
-    game.displayGame();
-    
-    const pureEquilibria = game.findPureStrategyEquilibria();
-    const mixedEquilibrium = game.findMixedNashEquilibrium();
-    
-    console.log(`\nSummary: Found ${pureEquilibria.length} pure strategy equilibria and ${mixedEquilibrium.exists ? 1 : 0} mixed strategy equilibrium`);
-}
+    console.log('\nVerification:');
+    console.log(`Is this a Nash Equilibrium? ${verification.isNashEquilibrium ? 'Yes' : 'No'}`);
+    console.log('\nExpected Payoffs:');
+    console.log(`Player 1 - Strategy 1: ${verification.payoffs.player1.strategy1.toFixed(4)}`);
+    console.log(`Player 1 - Strategy 2: ${verification.payoffs.player1.strategy2.toFixed(4)}`);
+    console.log(`Player 2 - Strategy 1: ${verification.payoffs.player2.strategy1.toFixed(4)}`);
+    console.log(`Player 2 - Strategy 2: ${verification.payoffs.player2.strategy2.toFixed(4)}`);
+  }
 
-// Example 2: Randomly generated game
-function example2() {
-    console.log("\n\nEXAMPLE 2: Randomly generated game");
-    console.log("=====================================\n");
-    
-    // Generate random payoffs between -10 and 10
-    const payoffs = [
-        [
-            [Math.floor(Math.random() * 21) - 10, Math.floor(Math.random() * 21) - 10],
-            [Math.floor(Math.random() * 21) - 10, Math.floor(Math.random() * 21) - 10]
-        ],
-        [
-            [Math.floor(Math.random() * 21) - 10, Math.floor(Math.random() * 21) - 10],
-            [Math.floor(Math.random() * 21) - 10, Math.floor(Math.random() * 21) - 10]
-        ]
-    ];
-    
-    const game = new GameSolver(payoffs);
-    game.displayGame();
-    
-    const pureEquilibria = game.findPureStrategyEquilibria();
-    const mixedEquilibrium = game.findMixedNashEquilibrium();
-    
-    console.log(`\nSummary: Found ${pureEquilibria.length} pure strategy equilibria and ${mixedEquilibrium.exists ? 1 : 0} mixed strategy equilibrium`);
-}
+  console.log('\nAlgorithm Explanation:');
+  console.log('1. For a 2x2 game, we solve the indifference equations for each player');
+  console.log('2. Player 1 must be indifferent: q*u1(s1,t1) + (1-q)*u1(s1,t2) = q*u1(s2,t1) + (1-q)*u1(s2,t2)');
+  console.log('3. Player 2 must be indifferent: p*u2(s1,t1) + (1-p)*u2(s2,t1) = p*u2(s1,t2) + (1-p)*u2(s2,t2)');
+  console.log('4. We solve for p and q, and check if they are in (0,1) for a completely mixed NE');
+  console.log('5. The mixing probabilities depend only on the opponent\'s payoffs');
 
-// Run examples
-example1();
-example2();
+  readline.close();
+};
 
-/* 
-ALGORITHM EXPLANATION:
-======================
-
-The algorithm for finding completely mixed Nash equilibria in 2x2 games works as follows:
-
-1. **Setup**: 
-   - Let p = probability that Player 1 plays their first strategy (row 0)
-   - Let q = probability that Player 2 plays their first strategy (column 0)
-   - For a completely mixed equilibrium: 0 < p < 1 and 0 < q < 1
-
-2. **Indifference Conditions**:
-   In a mixed Nash equilibrium, each player must be indifferent between their strategies.
-   This means the expected payoff from each strategy must be equal.
-   
-   For Player 1:
-   Expected payoff from strategy 0 = Expected payoff from strategy 1
-   q * a₁₁ + (1-q) * a₁₂ = q * a₂₁ + (1-q) * a₂₂
-   
-   For Player 2:
-   Expected payoff from strategy 0 = Expected payoff from strategy 1
-   p * b₁₁ + (1-p) * b₂₁ = p * b₁₂ + (1-p) * b₂₂
-
-3. **Solving**:
-   From Player 1's indifference: q = (a₂₂ - a₁₂) / (a₁₁ - a₁₂ - a₂₁ + a₂₂)
-   From Player 2's indifference: p = (b₂₂ - b₂₁) / (b₁₁ - b₂₁ - b₁₂ + b₂₂)
-
-4. **Validation**:
-   Check if 0 ≤ p ≤ 1 and 0 ≤ q ≤ 1. If both conditions hold, we have a valid mixed NE.
-
-5. **Key Insights**:
-   - A 2x2 game has at most one completely mixed Nash equilibrium
-   - If no mixed equilibrium exists, the game is solved by pure strategy equilibria
-   - The mixing probabilities depend only on the opponent's payoffs (not your own)
-   - This is because you need to make your opponent indifferent
-
-Time Complexity: O(1) - constant time for 2x2 games
-Space Complexity: O(1) - constant space
-*/
+// Run the program
+main();

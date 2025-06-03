@@ -1,5 +1,3 @@
-// Pure Nash Equilibria Finder for N-Player Normal-Form Games
-
 const { createReadlineInterface, prompt, getRandomInt } = require('../utility');
 
 const readline = createReadlineInterface();

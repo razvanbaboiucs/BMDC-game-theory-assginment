@@ -1,5 +1,9 @@
 # Mixed Nash Equilibria Finder for 2-Player Normal-Form Games
 
+## Git link:
+
+https://github.com/razvanbaboiucs/BMDC-game-theory-assginment/tree/master/6-mixed-ne
+
 ## Algorithm Explanation:
 
 ### Pseudocode:
@@ -188,8 +192,8 @@ Is this a Nash Equilibrium? Yes
 Expected Payoffs:
 Player 1 - Strategy 1: 1.2000
 Player 1 - Strategy 2: 1.2000
-Player 2 - Strategy 1: 0.8000
-Player 2 - Strategy 2: 0.8000
+Player 2 - Strategy 1: 1.2000
+Player 2 - Strategy 2: 1.2000
 
 ### Game 3: Prisoner's Dilemma
 
@@ -224,6 +228,8 @@ Enter payoff for strategy profile (2, 2): 1
 
 Completely Mixed Nash Equilibria:
 No completely mixed Nash Equilibrium exists for this game.
+Completely Mixed Nash Equilibria:
+The calculated probabilities are outside the valid range [0,1].
 
 ### Game 4: Random Game
 
@@ -232,31 +238,33 @@ Mixed Nash Equilibria Finder for 2-Player Normal-Form Games
 This implementation finds Nash Equilibria for 2x2 games.
 Do you want random payoffs? (yes/no): yes
 
-#### Payoff Matrix for Player 1:
+Payoff Matrix for Player 1:
 [
-     [42, 78]
-     [91, 23]
+     [63, 63]
+     [84, 46]
 ]
 
-#### Payoff Matrix for Player 2:
+
+Payoff Matrix for Player 2:
 [
-     [65, 12]
-     [37, 89]
+     [50, 51]
+     [57, 0]
 ]
+
 
 Completely Mixed Nash Equilibria:
 Found a completely mixed Nash Equilibrium:
-Player 1's strategy: (0.6747, 0.3253)
-Player 2's strategy: (0.7879, 0.2121)
+Player 1's strategy: (0.9828, 0.0172)
+Player 2's strategy: (0.4474, 0.5526)
 
 Verification:
 Is this a Nash Equilibrium? Yes
 
 Expected Payoffs:
-Player 1 - Strategy 1: 49.6364
-Player 1 - Strategy 2: 49.6364
-Player 2 - Strategy 1: 56.3434
-Player 2 - Strategy 2: 56.3434
+Player 1 - Strategy 1: 63.0000
+Player 1 - Strategy 2: 63.0000
+Player 2 - Strategy 1: 50.1207
+Player 2 - Strategy 2: 50.1207
 
 ## Limitations
 
@@ -264,3 +272,17 @@ Player 2 - Strategy 2: 56.3434
 1. The algorithm is specifically designed for 2-player, 2-strategy (2x2) games
 2. It only finds completely mixed Nash Equilibria, not pure or partially mixed equilibria
 3. Numerical precision issues may affect the accuracy of solutions in some cases
+
+### Generalization to 2-player, n-strategy (nx2) games
+
+Generalizing the algorithm for finding completely mixed Nash Equilibria to games with any number of strategies for both players (beyond 2x2) involves a significant increase in complexity, primarily because the indifference conditions become a system of linear equations rather than simple 2x2 equations.
+
+Here's a conceptual explanation of how it would work:
+
+1. *Indifference Conditions for N Strategies*: For each player, if they are playing a mixed strategy, they must be indifferent between all pure strategies they play with non-zero probability. If a completely mixed Nash Equilibrium exists, then each player must be indifferent between all of their pure strategies. This means for a player with m strategies, you'd have m-1 indifference equations.
+2. *System of Linear Equations*: For a game with two players, Player 1 with m strategies and Player 2 with n strategies:
+   
+   - Player 1's indifference conditions will generate m-1 equations involving Player 2's n probabilities.
+   - Player 2's indifference conditions will generate n-1 equations involving Player 1's m probabilities.
+   - Additionally, the probabilities for each player must sum to 1 (e.g., p1 + p2 + ... + pm = 1 and q1 + q2 + ... + qn = 1 ).
+3. *Solving the System*: The core challenge is solving this larger system of linear equations. Unlike the 2x2 case where simple algebraic manipulation suffices, for m x n games, you would typically need to use more advanced linear algebra techniques

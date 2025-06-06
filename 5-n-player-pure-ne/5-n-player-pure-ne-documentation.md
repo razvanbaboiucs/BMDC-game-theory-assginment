@@ -1,5 +1,9 @@
 # Pure Nash Equilibria Finder for N-Player Normal-Form Games
 
+## Git link:
+
+https://github.com/razvanbaboiucs/BMDC-game-theory-assginment/tree/master/5-n-player-pure-ne
+
 ## Algorithm Explanation:
 
 ### Pseudocode:
@@ -83,7 +87,8 @@ Do you want random payoffs? (yes/no): yes
 
 Pure Nash Equilibria:
 Found 1 pure Nash Equilibria:
-1. Strategy profile: (2, 1)
+1. Strategy profile: (1, 2)
+2. Strategy profile: (2, 1)
 
 ### Game 2: 3-Player Game (2x2x2)
 
@@ -97,47 +102,42 @@ Do you want random payoffs? (yes/no): yes
 
 #### Payoff Matrix for Player 1:
 [
-  [
-    [23, 45]
-    [67, 12]
-  ]
-  [
-    [89, 34]
-    [56, 78]
-  ]
+[  [12,  48      ]
+  [50,  91      ]
 ]
+[  [26,  44      ]
+  [42,  89      ]
+]
+]
+
 
 #### Payoff Matrix for Player 2:
 [
-  [
-    [54, 76]
-    [32, 98]
-  ]
-  [
-    [10, 87]
-    [65, 43]
-  ]
+[  [28,  5       ]
+  [17,   68      ]
 ]
+[  [13,  81      ]
+  [24,   69      ]
+]
+]
+
 
 #### Payoff Matrix for Player 3:
 [
-  [
-    [21, 43]
-    [65, 87]
-  ]
-  [
-    [90, 12]
-    [34, 56]
-  ]
+[  [46,  43      ]
+  [22,   97      ]
+]
+[  [71,  24      ]
+  [95,   81      ]
+]
 ]
 
+
 Pure Nash Equilibria:
-Found 2 pure Nash Equilibria:
+Found 1 pure Nash Equilibria:
 1. Strategy profile: (1, 2, 2)
-2. Strategy profile: (2, 1, 1)
 
 ### Game 3: 3-Player Game with Different Strategy Counts (2x3x2)
-
 Pure Nash Equilibria Finder for N-Player Normal-Form Games
 
 Enter number of players (maximum 10): 3
@@ -148,49 +148,41 @@ Do you want random payoffs? (yes/no): yes
 
 #### Payoff Matrix for Player 1:
 [
-  [
-    [12, 34]
-    [56, 78]
-    [90, 12]
-  ]
-  [
-    [34, 56]
-    [78, 90]
-    [12, 34]
-  ]
+[  [35,  63      ]
+  [32,   99      ]
+  [92,   87      ]
 ]
+[  [65,  87      ]
+  [3,    30      ]
+  [19,   95      ]
+]
+]
+
 
 #### Payoff Matrix for Player 2:
 [
-  [
-    [43, 65]
-    [87, 21]
-    [43, 65]
-  ]
-  [
-    [87, 21]
-    [43, 65]
-    [87, 21]
-  ]
+[  [98,  22      ]
+  [92,   28      ]
+  [52,   48      ]
 ]
+[  [63,  50      ]
+  [51,   35      ]
+  [84,   11      ]
+]
+]
+
 
 #### Payoff Matrix for Player 3:
 [
-  [
-    [32, 54]
-    [76, 98]
-    [10, 32]
-  ]
-  [
-    [54, 76]
-    [98, 10]
-    [32, 54]
-  ]
+[  [21,  9       ]
+  [27,   3       ]
+  [43,   54      ]
 ]
-
-Pure Nash Equilibria:
-Found 1 pure Nash Equilibria:
-1. Strategy profile: (2, 3, 1)
+[  [83,  61      ]
+  [69,   60      ]
+  [68,   81      ]
+]
+]
 
 ## Performance Considerations
 
